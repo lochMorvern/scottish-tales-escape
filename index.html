@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scottish Tales Escape Room</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a3a5c 0%, #2d5a3d 50%, #1a3a5c 100%);
+            color: #f4e4c1;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px solid #c9a227;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(201, 162, 39, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #c9a227;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            font-style: italic;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .celtic-divider {
+            font-size: 1.5rem;
+            color: #c9a227;
+            margin: 20px 0;
+        }
+
+        .instructions {
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* Station Styling */
+        .station-group {
+            margin-bottom: 25px;
+            text-align: left;
+            transition: opacity 0.3s ease;
+        }
+
+        .station-group.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .station-label {
+            font-size: 1.1rem;
+            color: #c9a227;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .code-input {
+            flex: 1;
+            padding: 12px;
+            font-size: 1.3rem;
+            text-align: center;
+            border: 2px solid #c9a227;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #f4e4c1;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .code-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(201, 162, 39, 0.5);
+        }
+
+        .code-input:disabled {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: #555;
+            color: #777;
+            cursor: not-allowed;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #c9a227, #8b7355);
+            color: #1a1a1a;
+            border: none;
+            padding: 0 20px;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(201, 162, 39, 0.6);
+        }
+
+        .submit-btn:disabled {
+            background: #555;
+            color: #777;
+            cursor: not-allowed;
+        }
+
+        #message {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        .success {
+            background: rgba(45, 90, 61, 0.8);
+            border: 2px solid #4caf50;
+            color: #90EE90;
+        }
+
+        .error {
+            background: rgba(139, 69, 69, 0.8);
+            border: 2px solid #8b4545;
+            color: #ffcccc;
+        }
+
+        .thistle {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        /* CUSTOM CONGRATS MODAL STYLING */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #112233 0%, #1e3c27 100%);
+            border: 4px double #c9a227;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 550px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(201, 162, 39, 0.6);
+            transform: scale(0.8);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content h2 {
+            font-size: 3rem;
+            color: #c9a227;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(201, 162, 39, 0.5);
+        }
+
+        .modal-content p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .close-modal-btn {
+            background: linear-gradient(135deg, #c9a227, #8b7355);
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s;
+        }
+
+        .close-modal-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="thistle">🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
+        <h1>Scottish Tales</h1>
+        <p class="subtitle">An Escape Room Adventure</p>
+        
+        <div class="celtic-divider">⚔ ✦ ⚔</div>
+        
+        <p class="instructions">
+            Enter the secret codes ye've discovered through yer investigations...
+        </p>
+        
+        <div class="station-group" id="group-1">
+            <label class="station-label">Station 1</label>
+            <div class="input-row">
+                <input type="text" class="code-input" id="code-1" placeholder="Enter Code 1" maxlength="20" autocomplete="off">
+                <button class="submit-btn" id="btn-1" onclick="checkCode(1)">Unlock</button>
+            </div>
+        </div>
+
+        <div class="station-group disabled" id="group-2">
+            <label class="station-label">Station 2</label>
+            <div class="input-row">
+                <input type="text" class="code-input" id="code-2" placeholder="Locked" maxlength="20" autocomplete="off" disabled>
+                <button class="submit-btn" id="btn-2" onclick="checkCode(2)" disabled>Unlock</button>
+            </div>
+        </div>
+
+        <div class="station-group disabled" id="group-3">
+            <label class="station-label">Station 3</label>
+            <div class="input-row">
+                <input type="text" class="code-input" id="code-3" placeholder="Locked" maxlength="20" autocomplete="off" disabled>
+                <button class="submit-btn" id="btn-3" onclick="checkCode(3)" disabled>Unlock</button>
+            </div>
+        </div>
+
+        <div class="station-group disabled" id="group-4">
+            <label class="station-label">Station 4</label>
+            <div class="input-row">
+                <input type="text" class="code-input" id="code-4" placeholder="Locked" maxlength="20" autocomplete="off" disabled>
+                <button class="submit-btn" id="btn-4" onclick="checkCode(4)" disabled>Unlock</button>
+            </div>
+        </div>
+        
+        <div id="message"></div>
+    </div>
+
+    <div class="modal-overlay" id="congratsModal">
+        <div class="modal-content">
+            <div style="font-size: 4rem; margin-bottom: 10px;">👑</div>
+            <h2>Congrats!</h2>
+            <div class="celtic-divider">⚔ ✦ ⚔</div>
+            <p>
+                Alas, brave traveler! Ye have cracked all four puzzles and successfully survived the Scottish Tales Escape Room!
+            </p>
+            <button class="close-modal-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CHANGE YOUR SECRET CODES HERE
+        // ============================================
+        const SECRET_CODES = {
+            1: "SELKIE",
+            2: "HIGHLAND",
+            3: "LOCHNESS",
+            4: "EDINBURGH"
+        };
+        // ============================================
+
+        function checkCode(stationNum) {
+            var input = document.getElementById('code-' + stationNum);
+            var message = document.getElementById('message');
+            var userCode = input.value.trim().toUpperCase();
+            var correctCode = SECRET_CODES[stationNum].toUpperCase();
+
+            if (userCode === correctCode) {
+                message.className = 'success';
+                message.style.display = 'block';
+                
+                input.disabled = true;
+                document.getElementById('btn-' + stationNum).disabled = true;
+
+                if (stationNum < 4) {
+                    message.innerHTML = `🎉 Station ${stationNum} Cleared! 🎉<br>Proceed to the next puzzle.`;
+                    
+                    var nextStation = stationNum + 1;
+                    var nextGroup = document.getElementById('group-' + nextStation);
+                    var nextInput = document.getElementById('code-' + nextStation);
+                    var nextBtn = document.getElementById('btn-' + nextStation);
+
+                    nextGroup.classList.remove('disabled');
+                    nextInput.disabled = false;
+                    nextInput.placeholder = "Enter Code " + nextStation;
+                    nextBtn.disabled = false;
+                    
+                    nextInput.focus();
+                } else {
+                    // Final station code logic triggers custom styled pop-up instead of browser alert
+                    message.innerHTML = '🎉 Ultimate Victory! Yer journey is complete! 🎉';
+                    showModal();
+                }
+            } else {
+                message.className = 'error';
+                message.style.display = 'block';
+                message.textContent = "Och, that's not quite right. Try again!";
+                
+                setTimeout(function() {
+                    message.style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        function showModal() {
+            document.getElementById('congratsModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('congratsModal').classList.remove('active');
+        }
+
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById('code-' + i).addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkCode(i);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
