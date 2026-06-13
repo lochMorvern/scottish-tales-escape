@@ -245,7 +245,7 @@
         </p>
         
         <div class="station-group" id="group-1">
-            <label class="station-label">Station 1</label>
+            <label class="station-label" id="label-1">Question 1: What magical seal-creature sheds its skin?</label>
             <div class="input-row">
                 <input type="text" class="code-input" id="code-1" placeholder="Enter Code 1" maxlength="20" autocomplete="off">
                 <button class="submit-btn" id="btn-1" onclick="checkCode(1)">Unlock</button>
@@ -253,7 +253,7 @@
         </div>
 
         <div class="station-group disabled" id="group-2">
-            <label class="station-label">Station 2</label>
+            <label class="station-label" id="label-2">Station 2</label>
             <div class="input-row">
                 <input type="text" class="code-input" id="code-2" placeholder="Locked" maxlength="20" autocomplete="off" disabled>
                 <button class="submit-btn" id="btn-2" onclick="checkCode(2)" disabled>Unlock</button>
@@ -261,7 +261,7 @@
         </div>
 
         <div class="station-group disabled" id="group-3">
-            <label class="station-label">Station 3</label>
+            <label class="station-label" id="label-3">Station 3</label>
             <div class="input-row">
                 <input type="text" class="code-input" id="code-3" placeholder="Locked" maxlength="20" autocomplete="off" disabled>
                 <button class="submit-btn" id="btn-3" onclick="checkCode(3)" disabled>Unlock</button>
@@ -269,7 +269,7 @@
         </div>
 
         <div class="station-group disabled" id="group-4">
-            <label class="station-label">Station 4</label>
+            <label class="station-label" id="label-4">Station 4</label>
             <div class="input-row">
                 <input type="text" class="code-input" id="code-4" placeholder="Locked" maxlength="20" autocomplete="off" disabled>
                 <button class="submit-btn" id="btn-4" onclick="checkCode(4)" disabled>Unlock</button>
@@ -296,10 +296,20 @@
         // CHANGE YOUR SECRET CODES HERE
         // ============================================
         const SECRET_CODES = {
-            1: "SELKIE",
-            2: "HIGHLAND",
+            1: "KELPIE",
+            2: "IRON",
             3: "LOCHNESS",
-            4: "EDINBURGH"
+            4: "GLASGOW"
+        };
+
+        // ============================================
+        // ADD YOUR QUESTIONS HERE
+        // ============================================
+        const STATION_QUESTIONS = {
+            1: "What creature killed Campbell?",
+            2: "What is the issue with the wittness' report?",
+            3: "Who is the actual killer?",
+            4: "Where is the killer hiding?"
         };
         // ============================================
 
@@ -316,6 +326,9 @@
                 input.disabled = true;
                 document.getElementById('btn-' + stationNum).disabled = true;
 
+                // Optional: Change the solved station text to show it's completed
+                document.getElementById('label-' + stationNum).textContent = `Station ${stationNum} - Cleared!`;
+
                 if (stationNum < 4) {
                     message.innerHTML = `🎉 Station ${stationNum} Cleared! 🎉<br>Proceed to the next puzzle.`;
                     
@@ -323,15 +336,18 @@
                     var nextGroup = document.getElementById('group-' + nextStation);
                     var nextInput = document.getElementById('code-' + nextStation);
                     var nextBtn = document.getElementById('btn-' + nextStation);
+                    var nextLabel = document.getElementById('label-' + nextStation); // Target the next label
 
                     nextGroup.classList.remove('disabled');
                     nextInput.disabled = false;
                     nextInput.placeholder = "Enter Code " + nextStation;
                     nextBtn.disabled = false;
                     
+                    // SWAP LABELS HERE: Turn "Station X" into the assigned puzzle question
+                    nextLabel.textContent = STATION_QUESTIONS[nextStation];
+                    
                     nextInput.focus();
                 } else {
-                    // Final station code logic triggers custom styled pop-up instead of browser alert
                     message.innerHTML = '🎉 Ultimate Victory! Yer journey is complete! 🎉';
                     showModal();
                 }
