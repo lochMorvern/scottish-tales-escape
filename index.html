@@ -12,6 +12,7 @@
         }
 
         body {
+            /* Changed to allow natural scrolling on small screens when the keyboard appears */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -19,22 +20,23 @@
             font-family: 'Georgia', serif;
             background: linear-gradient(135deg, #1a3a5c 0%, #2d5a3d 50%, #1a3a5c 100%);
             color: #f4e4c1;
-            padding: 20px;
+            padding: 15px; /* Slightly reduced for extra mobile breathing room */
         }
 
         .container {
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.8); /* Darkened slightly for text readability on mobile */
             border: 3px solid #c9a227;
             border-radius: 15px;
-            padding: 40px;
+            padding: 25px 20px; /* Reduced padding on small screens */
             max-width: 500px;
             width: 100%;
             text-align: center;
             box-shadow: 0 0 30px rgba(201, 162, 39, 0.3);
+            margin: auto; /* Keeps it centered nicely if scrolling triggers */
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem; /* Scaled down slightly for small mobile headers */
             margin-bottom: 10px;
             color: #c9a227;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -42,19 +44,21 @@
 
         .subtitle {
             font-style: italic;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             opacity: 0.9;
+            font-size: 0.95rem;
         }
 
         .celtic-divider {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: #c9a227;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .instructions {
             margin-bottom: 25px;
-            line-height: 1.6;
+            line-height: 1.5;
+            font-size: 0.95rem;
         }
 
         /* Station Styling */
@@ -70,30 +74,33 @@
         }
 
         .station-label {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #c9a227;
             margin-bottom: 8px;
             display: block;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
+            line-height: 1.4;
         }
 
         .input-row {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap; /* Allows the button to drop neatly below the input on extremely tiny screens */
         }
 
         .code-input {
-            flex: 1;
+            flex: 2;
+            min-width: 150px;
             padding: 12px;
-            font-size: 1.3rem;
+            font-size: 1.1rem; /* Prevents auto-zoom trap on mobile safari/chrome */
             text-align: center;
             border: 2px solid #c9a227;
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.1);
             color: #f4e4c1;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
@@ -110,11 +117,13 @@
         }
 
         .submit-btn {
+            flex: 1;
+            min-width: 100px;
             background: linear-gradient(135deg, #c9a227, #8b7355);
             color: #1a1a1a;
             border: none;
-            padding: 0 20px;
-            font-size: 1rem;
+            padding: 12px 20px; /* Added explicit vertical padding for easier finger tapping */
+            font-size: 0.95rem;
             font-family: 'Georgia', serif;
             font-weight: bold;
             border-radius: 8px;
@@ -125,7 +134,7 @@
         }
 
         .submit-btn:hover:not(:disabled) {
-            transform: scale(1.05);
+            transform: scale(1.02);
             box-shadow: 0 0 20px rgba(201, 162, 39, 0.6);
         }
 
@@ -139,7 +148,7 @@
             margin-top: 25px;
             padding: 15px;
             border-radius: 8px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             display: none;
         }
 
@@ -156,8 +165,8 @@
         }
 
         .thistle {
-            font-size: 3rem;
-            margin-bottom: 15px;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
 
         /* CUSTOM CONGRATS MODAL STYLING */
@@ -167,7 +176,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9); /* Darkened overlay to hide background clutter on small viewports */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -175,6 +184,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.5s ease;
+            padding: 15px;
         }
 
         .modal-overlay.active {
@@ -186,13 +196,15 @@
             background: linear-gradient(135deg, #112233 0%, #1e3c27 100%);
             border: 4px double #c9a227;
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px 20px;
             max-width: 550px;
-            width: 90%;
+            width: 100%;
             text-align: center;
             box-shadow: 0 0 50px rgba(201, 162, 39, 0.6);
             transform: scale(0.8);
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 90vh; /* Prevents overflow bugs on short landscape screens */
+            overflow-y: auto;
         }
 
         .modal-overlay.active .modal-content {
@@ -200,16 +212,16 @@
         }
 
         .modal-content h2 {
-            font-size: 3rem;
+            font-size: 2.2rem;
             color: #c9a227;
             margin-bottom: 15px;
             text-shadow: 0 0 10px rgba(201, 162, 39, 0.5);
         }
 
         .modal-content p {
-            font-size: 1.3rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
         }
 
         .close-modal-btn {
@@ -217,7 +229,7 @@
             color: #1a1a1a;
             border: none;
             padding: 12px 35px;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-family: 'Georgia', serif;
             font-weight: bold;
             border-radius: 8px;
@@ -227,8 +239,13 @@
             transition: transform 0.2s;
         }
 
-        .close-modal-btn:hover {
-            transform: scale(1.05);
+        /* Desktop specific scaling tweaks */
+        @media (min-width: 480px) {
+            .container { padding: 40px; }
+            h1 { font-size: 2.5rem; }
+            .modal-content { padding: 40px; }
+            .modal-content h2 { font-size: 3rem; }
+            .modal-content p { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -247,7 +264,7 @@
         <div class="station-group" id="group-1">
             <label class="station-label" id="label-1">Question 1: What magical creature killed Campbell?</label>
             <div class="input-row">
-                <input type="text" class="code-input" id="code-1" placeholder="Enter Code 1" maxlength="20" autocomplete="off">
+                <input type="text" class="code-input" id="code-1" placeholder="Enter Code 1" maxlength="20" autocomplete="off" enterkeyhint="go">
                 <button class="submit-btn" id="btn-1" onclick="checkCode(1)">Unlock</button>
             </div>
         </div>
@@ -255,7 +272,7 @@
         <div class="station-group disabled" id="group-2">
             <label class="station-label" id="label-2">Station 2</label>
             <div class="input-row">
-                <input type="text" class="code-input" id="code-2" placeholder="Locked" maxlength="20" autocomplete="off" disabled>
+                <input type="text" class="code-input" id="code-2" placeholder="Locked" maxlength="20" autocomplete="off" disabled enterkeyhint="go">
                 <button class="submit-btn" id="btn-2" onclick="checkCode(2)" disabled>Unlock</button>
             </div>
         </div>
@@ -263,7 +280,7 @@
         <div class="station-group disabled" id="group-3">
             <label class="station-label" id="label-3">Station 3</label>
             <div class="input-row">
-                <input type="text" class="code-input" id="code-3" placeholder="Locked" maxlength="20" autocomplete="off" disabled>
+                <input type="text" class="code-input" id="code-3" placeholder="Locked" maxlength="20" autocomplete="off" disabled enterkeyhint="go">
                 <button class="submit-btn" id="btn-3" onclick="checkCode(3)" disabled>Unlock</button>
             </div>
         </div>
@@ -271,7 +288,7 @@
         <div class="station-group disabled" id="group-4">
             <label class="station-label" id="label-4">Station 4</label>
             <div class="input-row">
-                <input type="text" class="code-input" id="code-4" placeholder="Locked" maxlength="20" autocomplete="off" disabled>
+                <input type="text" class="code-input" id="code-4" placeholder="Locked" maxlength="20" autocomplete="off" disabled enterkeyhint="go">
                 <button class="submit-btn" id="btn-4" onclick="checkCode(4)" disabled>Unlock</button>
             </div>
         </div>
@@ -292,9 +309,6 @@
     </div>
 
     <script>
-        // ============================================
-        // CHANGE YOUR SECRET CODES HERE
-        // ============================================
         const SECRET_CODES = {
             1: "KELPIE",
             2: "IRON",
@@ -302,16 +316,12 @@
             4: "GLASGOW"
         };
 
-        // ============================================
-        // ADD YOUR QUESTIONS HERE
-        // ============================================
         const STATION_QUESTIONS = {
             1: "What creature killed Campbell?",
             2: "What is the issue with the wittness' report?",
             3: "Who is the actual killer?",
             4: "Where is the killer hiding?"
         };
-        // ============================================
 
         function checkCode(stationNum) {
             var input = document.getElementById('code-' + stationNum);
@@ -326,7 +336,6 @@
                 input.disabled = true;
                 document.getElementById('btn-' + stationNum).disabled = true;
 
-                // Optional: Change the solved station text to show it's completed
                 document.getElementById('label-' + stationNum).textContent = `Station ${stationNum} - Cleared!`;
 
                 if (stationNum < 4) {
@@ -336,17 +345,19 @@
                     var nextGroup = document.getElementById('group-' + nextStation);
                     var nextInput = document.getElementById('code-' + nextStation);
                     var nextBtn = document.getElementById('btn-' + nextStation);
-                    var nextLabel = document.getElementById('label-' + nextStation); // Target the next label
+                    var nextLabel = document.getElementById('label-' + nextStation);
 
                     nextGroup.classList.remove('disabled');
                     nextInput.disabled = false;
                     nextInput.placeholder = "Enter Code " + nextStation;
                     nextBtn.disabled = false;
                     
-                    // SWAP LABELS HERE: Turn "Station X" into the assigned puzzle question
                     nextLabel.textContent = STATION_QUESTIONS[nextStation];
                     
-                    nextInput.focus();
+                    // Small delay helps mobile browsers shift focus cleanly without visual stuttering
+                    setTimeout(() => {
+                        nextInput.focus();
+                    }, 50);
                 } else {
                     message.innerHTML = '🎉 Ultimate Victory! Yer journey is complete! 🎉';
                     showModal();
@@ -373,6 +384,8 @@
         for (let i = 1; i <= 4; i++) {
             document.getElementById('code-' + i).addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
+                    // Mobile fix: blur input to force virtual keyboard to collapse when pressing enter
+                    this.blur();
                     checkCode(i);
                 }
             });
